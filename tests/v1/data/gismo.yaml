@@ -1,0 +1,1 @@
+extra_config: {enable_gismo_storage: true, gismo_socket_path: "/var/run/dmo/dmo.daemon.sock.0", gismo_directory: "/gismo", gismo_gpu_memory_size: 4294967296}

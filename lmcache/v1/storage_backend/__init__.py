@@ -122,6 +122,9 @@ def CreateStorageBackends(
     enable_nixl_storage = extra_config is not None and extra_config.get(
         "enable_nixl_storage"
     )
+    enable_gismo_storage = extra_config is not None and extra_config.get(
+        "enable_gismo_storage"
+    )
 
     if config.enable_pd:
         # First Party
@@ -171,6 +174,17 @@ def CreateStorageBackends(
         storage_backends["NixlStorageBackend"] = (
             NixlStorageBackend.CreateNixlStorageBackend(config, loop, metadata)
         )
+
+    if enable_gismo_storage:
+        assert local_cpu_backend is not None
+        # First Party
+        from lmcache.v1.storage_backend.gismo_storage_backend import GismoStorageBackend
+
+        gismo_storage_backend = GismoStorageBackend(
+            config, loop, local_cpu_backend, metadata, dst_device
+        )
+        backend_name = str(gismo_storage_backend)
+        storage_backends[backend_name] = gismo_storage_backend
 
     if config.local_disk and config.max_local_disk_size > 0:
         assert local_cpu_backend is not None
